@@ -49,3 +49,5 @@ DerivedDataCache/*
 
 # Rider
 .idea
+# Local MCP config (machine-specific paths)
+.mcp.json
