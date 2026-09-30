@@ -1,8 +1,9 @@
 {
 	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.6.7",
-    "SemVersion": "1.6.7",
+	"Version": 2,
+	"VersionName": "2.0.0",
+	"SemVersion": "2.0.0",
+	"GameVersion": ">=491125",
 	"FriendlyName": "Area Actions",
 	"Description": "Do stuff that usually takes too long, with just a few clicks",
 	"Category": "Modding",
@@ -15,11 +16,19 @@
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
-    "Plugins": [
-        {
-            "Name": "SML",
-            "SemVersion": "^3.4.1",
-            "Enabled": true
-        }
-    ]
+	"BuiltInInitialFeatureState": "Active",
+	"Modules": [
+		{
+			"Name": "AreaActions",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.12.0",
+			"Enabled": true
+		}
+	]
 }
