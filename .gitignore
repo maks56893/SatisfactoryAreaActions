@@ -51,3 +51,6 @@ DerivedDataCache/*
 .idea
 # Local MCP config (machine-specific paths)
 .mcp.json
+
+# Local Claude Code settings
+.claude/settings.local.json
