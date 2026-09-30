@@ -29,6 +29,11 @@
 			"Name": "SML",
 			"SemVersion": "^3.12.0",
 			"Enabled": true
+		},
+		{
+			"Name": "AbstractInstance",
+			"Enabled": true,
+			"BasePlugin": true
 		}
 	]
 }
