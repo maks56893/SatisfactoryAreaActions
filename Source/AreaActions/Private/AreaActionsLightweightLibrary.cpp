@@ -67,14 +67,22 @@ bool UAreaActionsLightweightLibrary::IsLightweightBuildableClass(TSubclassOf<AFG
 TArray<FLightweightBuildableInstanceRef> UAreaActionsLightweightLibrary::GetLightweightsInArea(UObject* WorldContext, const TArray<FVector2D>& AreaPolygon, double MinZ, double MaxZ, EAreaActionsAreaTest Test, const TArray<TSubclassOf<AFGBuildable>>& ClassFilter)
 {
 	TArray<FLightweightBuildableInstanceRef> Result;
-	if (AreaPolygon.Num() < 3)
-	{
-		return Result;
-	}
 	AFGLightweightBuildableSubsystem* Subsystem = AFGLightweightBuildableSubsystem::Get(WorldContext);
-	if (!Subsystem)
+	TArray<FAreaActionsLightweightIndex> Found;
+	FindLightweightsInArea(Subsystem, AreaPolygon, MinZ, MaxZ, Test, ClassFilter, Found);
+	for (const FAreaActionsLightweightIndex& Entry : Found)
 	{
-		return Result;
+		Result.AddDefaulted_GetRef().Initialize(Subsystem, Entry.BuildableClass, Entry.Index);
+	}
+	return Result;
+}
+
+void UAreaActionsLightweightLibrary::FindLightweightsInArea(AFGLightweightBuildableSubsystem* Subsystem, const TArray<FVector2D>& AreaPolygon, double MinZ, double MaxZ, EAreaActionsAreaTest Test, const TArray<TSubclassOf<AFGBuildable>>& ClassFilter, TArray<FAreaActionsLightweightIndex>& OutFound)
+{
+	OutFound.Reset();
+	if (!Subsystem || AreaPolygon.Num() < 3)
+	{
+		return;
 	}
 
 	const FBox2D PolygonBox(AreaPolygon);
@@ -103,11 +111,10 @@ TArray<FLightweightBuildableInstanceRef> UAreaActionsLightweightLibrary::GetLigh
 			ComputeWorldCorners(ShrinkForMatching(GetLocalBounds(BuildableClass, Data, ClassBoundsCache)), Data.Transform, Corners);
 			if (MatchesArea(Corners, AreaPolygon, PolygonBox, MinZ, MaxZ, Test))
 			{
-				Result.AddDefaulted_GetRef().Initialize(Subsystem, BuildableClass, Index);
+				OutFound.Add({BuildableClass, Index, Data.Transform.GetLocation()});
 			}
 		}
 	}
-	return Result;
 }
 
 bool UAreaActionsLightweightLibrary::GetLightweightWorldCorners(const FLightweightBuildableInstanceRef& Instance, TArray<FVector>& OutCorners)

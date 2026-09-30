@@ -49,6 +49,14 @@ struct AREAACTIONS_API FAreaActionsLightweightSnapshot
 	FFGDynamicStruct TypeSpecificData;
 };
 
+/** A lightweight buildable addressed the way the lightweight subsystem stores it (C++ only). */
+struct FAreaActionsLightweightIndex
+{
+	TSubclassOf<AFGBuildable> BuildableClass;
+	int32 Index = INDEX_NONE;
+	FVector Location = FVector::ZeroVector;
+};
+
 /**
  * Since 1.0 walls, foundations, beams etc. are "lightweight buildables": they have no actor, so
  * GetAllActorsOfClass does not see them, and the lightweight subsystem only exposes per-instance
@@ -94,5 +102,8 @@ public:
 	/** Creates a lightweight buildable from a snapshot at Snapshot.Transform. Authority only. */
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Area Actions|Lightweight", meta = (WorldContext = "WorldContext"))
 	static bool SpawnLightweight(UObject* WorldContext, const FAreaActionsLightweightSnapshot& Snapshot, FLightweightBuildableInstanceRef& OutInstance);
+
+	/** C++ counterpart of GetLightweightsInArea returning class + runtime index pairs. */
+	static void FindLightweightsInArea(AFGLightweightBuildableSubsystem* Subsystem, const TArray<FVector2D>& AreaPolygon, double MinZ, double MaxZ, EAreaActionsAreaTest Test, const TArray<TSubclassOf<AFGBuildable>>& ClassFilter, TArray<FAreaActionsLightweightIndex>& OutFound);
 
 };
